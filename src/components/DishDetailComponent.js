@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
-import { Media } from 'reactstrap';
-import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle } from 'reactstrap';
+import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
 export class DishDetail extends Component{
 
+    componentDidMount(){
+        console.log("Dish Component componentDidMount invoked")
+    }
+
+    componentDidUpdate(){
+        console.log("Dish Component componentDidUpdate invoked")
+    }
 
     renderDish(dish) {
             return(
@@ -21,9 +27,9 @@ export class DishDetail extends Component{
         if(comments !=null){
             const comment = comments.map((comment) =>{
                 return(
-                    <ul>
-                        <li>{comment.comment}</li>
-                        <li>{comment.author} {comment.date}</li>
+                    <ul key={comment.id}>
+                        <p>{comment.comment}</p>
+                        <p>-- {comment.author}, {new Intl.DateTimeFormat('en-US', {year: 'numeric', month:'short',day:'2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
                     </ul>
                     
                 );
@@ -41,20 +47,22 @@ export class DishDetail extends Component{
      }
 
     render(){
+        console.log("Dish Component render invoked")
             if(this.props.dish !=null){
                 return(
-                    <div className="row">
-                        <div className="col-12 col-md-5 m-1">
-                            {/* dish */}
-                            {this.renderDish(this.props.dish)}
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-12 col-md-5 m-1">
+                                {/* dish */}
+                                {this.renderDish(this.props.dish)}
+                            </div>
+                            <div className="col-12 col-md-5 m-1">
+                                {/* comments */}
+                                <h4>Comments</h4>
+                                {this.renderComments(this.props.dish.comments)}
+                            </div>
                         </div>
-                        <div className="col-12 col-md-5 m-1">
-                            {/* comments */}
-                            <h4>Comments</h4>
-                            {this.renderComments(this.props.dish.comments)}
-                        </div>
-                    </div>
-                                
+                    </div>             
                 )
             }
             else {
