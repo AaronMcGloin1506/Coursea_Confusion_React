@@ -27,8 +27,6 @@ class Main extends Component {
 
   }
 
-  
-
     render() {
         const HomePage = () => {
             return(
