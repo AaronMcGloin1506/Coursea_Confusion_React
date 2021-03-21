@@ -22,23 +22,23 @@ const minLength = (len) => (val) => (val) && (val.length >= len); //insures that
             );
     }
     
-    function RenderComments({ comments }) {
+    function RenderComments({ comments, addComment, dishId }) {
 
         
         if(comments !=null){
             const comment = comments.map((comment) =>{
                 return(
-                    <ul key={comment.id}>
+                    <div key={comment.id}>
                         <p>{comment.comment}</p>
                         <p>-- {comment.author}, {new Intl.DateTimeFormat('en-US', {year: 'numeric', month:'short',day:'2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
-                    </ul>
+                    </div>
                     
                 );
             })
             return(
                 <div>
                     {comment}
-                    <CommentForm />
+                    <CommentForm dishId={dishId} addComment={addComment}/>
                 </div>
             );
         } else {
@@ -55,17 +55,24 @@ const minLength = (len) => (val) => (val) && (val.length >= len); //insures that
         constructor(props){
             super(props);
     
-            this.state ={
+            this.state ={ 
                 isModalOpen: false
             }
         
             this.toggleModal = this.toggleModal.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
         }
     
         toggleModal(){
             this.setState({
                 isModalOpen: !this.state.isModalOpen
             })
+        }
+
+        handleSubmit(values){
+            this.toggleModal();
+            alert('Current State is: ' + JSON.stringify(values));
+            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
         }
 
         render(){
@@ -75,7 +82,7 @@ const minLength = (len) => (val) => (val) && (val.length >= len); //insures that
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                 <ModalHeader isOpen={this.state.isModalOpen} toggle={this.toggleModal}>Submit Comment</ModalHeader>
                 <ModalBody>
-                    <LocalForm className="p-3">
+                    <LocalForm onSubmit={this.handleSubmit} className="p-3">
                         <Row className="form-group">
                             <Label htmlfor="rating">Rating</Label>
                         </Row>
@@ -91,17 +98,17 @@ const minLength = (len) => (val) => (val) && (val.length >= len); //insures that
                         </Row>
 
                         <Row className="form-group">
-                            <Label htmlfor="name">Your Name</Label>
+                            <Label htmlfor="author">Your Name</Label>
                         </Row>
                         <Row className="form-group">
-                            <Control.text model=".name" id="name" name="name" 
+                            <Control.text model=".author" id="author" name="author" 
                                 className="form-control"
                                 validators={{
                                     required, minLength: minLength(2), maxLength: maxLength(15)
                                 }} />
                             <Errors
                                 className="text-danger"
-                                model=".name"
+                                model=".author"
                                 show="touched"
                                 messages={{
                                     required: 'Required ',
@@ -155,7 +162,9 @@ const minLength = (len) => (val) => (val) && (val.length >= len); //insures that
                         <div className="col-12 col-md-5 m-1">
                             {/* comments */}
                             <h4>Comments</h4>
-                            <RenderComments comments={props.comments} />
+                            <RenderComments comments={props.comments}
+                                addComment={props.addComment}
+                                dishId={props.dish.id} />
                         </div>
                     </div>
                 </div>             
