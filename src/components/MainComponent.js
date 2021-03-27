@@ -7,7 +7,7 @@ import DishDetail  from './DishDetailComponent';
 import About from './AboutComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
-
+import { TransitionGroup, CSSTransition } from 'react-transition-group' 
 
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -73,15 +73,19 @@ class Main extends Component {
         return (
           <div>
             <Header />
-            <Switch>
-              {/*  component={() => <Menu dishes={this.props.dishes} />} is an example of sending an attribute to a component */}
-                <Route path="/home" component={HomePage} />
-                <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes} />}/>
-                <Route path="/menu/:dishId" component={DishWithId} />
-                <Route exact path='/contactus' component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
-                <Route exact path="/aboutus" component={() => <About leaders={this.props.leaders}/> }/>
-                <Redirect to="/home" />
-            </Switch>
+            <TransitionGroup>
+              <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
+                <Switch>
+                  {/*  component={() => <Menu dishes={this.props.dishes} />} is an example of sending an attribute to a component */}
+                    <Route path="/home" component={HomePage} />
+                    <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes} />}/>
+                    <Route path="/menu/:dishId" component={DishWithId} />
+                    <Route exact path='/contactus' component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+                    <Route exact path="/aboutus" component={() => <About leaders={this.props.leaders}/> }/>
+                    <Redirect to="/home" />
+                </Switch>
+              </CSSTransition>
+            </TransitionGroup>
             <Footer />
           </div>
         );
