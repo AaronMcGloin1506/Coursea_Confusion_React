@@ -42,9 +42,8 @@ class Header extends Component {
                 <div className="container">
                     <NavbarToggler onClick={this.toggleNav} />
                     <NavbarBrand className="mr-auto" href="/">
-                        <img src="/Users/AaronMcGloin/Coursea/React/confusion/public/assets/images/logo.png" height="30" width="41" alt="Ristorant Cont Fusion" />
-                    </NavbarBrand>
-                    <Collapse isOpen={this.state.isNavOpen} navbar>
+                        <img src='assets/images/logo.png' height="30" width="41" alt="Ristorant Con Fusion" />
+                    </NavbarBrand><Collapse isOpen={this.state.isNavOpen} navbar>
                     <Nav navbar>
                         <NavItem>
                             <NavLink className="nav-link" to="/home">
